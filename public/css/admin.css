@@ -110,3 +110,9 @@ body{
     font-size: 16px;
 }
 
+.heading-h1{
+    font-family: 'Merriweather', serif;
+    color: #333333;
+    text-align: center;
+    margin: 12px;
+}
