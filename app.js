@@ -58,7 +58,7 @@ app.post("/", function(req, res){
         } else {
             if(foundAdmin){
                 if(foundAdmin.password === password){
-                    res.send("Congratulation");
+                    res.redirect("admin");
                 }else{
                     // alert("Login Failed, Enter valid credentials", 'showAlert');
                     displayError.push({text: "Invalid username or password!"});
@@ -78,7 +78,7 @@ app.post("/", function(req, res){
         } else {
             if(foundEmployee){
                 if(foundEmployee.password === password){
-                    res.send("Congratulation");
+                    res.redirect("employee-home");
                 }else{
                     // alert("Login Failed, Enter valid credentials", 'showAlert');
                     displayError.push({text: "Invalid username or password!"});
@@ -111,6 +111,26 @@ app.post('/register', function(req, res){
             res.redirect("/");
         }
     });
+});
+
+app.get('/admin', function(req, res){
+    res.render("adminHome");
+});
+
+app.get('/admin-grocery', function(req, res){
+    res.render("adminGrocery");
+});
+
+app.get('/admin-employee', function(req, res){
+    res.render("adminEmployee");
+});
+
+app.get('/employee-home', function(req, res){
+    res.render("employeeHome");
+});
+
+app.get('/employee-grocery', function(req, res){
+    res.render("employeeGrocery");
 });
 
  app.listen(3000, function(){

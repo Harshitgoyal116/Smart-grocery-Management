@@ -1,0 +1,112 @@
+/*CSS for admin and employee page*/
+
+body{
+    margin: 0;
+    padding: 0;
+    background-color: rgb(252,251,250) !important;
+}
+
+.navbar{
+    border-bottom: 1px solid #eaeaea;
+}
+
+.nav-logo{
+    padding: 5px;
+    margin-left: 10%;
+    width: 260px;
+    height: 100px;
+}
+
+.nav-items{
+    float: right;
+    padding: 12px;
+    overflow: auto;
+    margin-right: 5%; 
+}
+
+.nav-items li{
+    float: left;
+    margin-top: 20px;
+    margin-left: 20px;
+    list-style: none;
+    cursor: pointer;
+    /* border: 1px solid black; */
+}
+
+.nav-items li a {
+    text-decoration: none;
+    color: black;
+    padding: 10px 15px;
+    font-family: 'Open Sans', sans-serif;
+    transition: 0.2s;
+}
+
+/* Profile image from font awesome */
+.profile-logo a i {
+    color: #8BC34A;
+    margin-top: 15px;
+    margin-left: 20px;
+    transition: 0.2s;
+}
+
+.profile-logo a i:hover {
+    color: #4c7919;
+}
+
+.nav-items li a:hover {
+    color: #8BC34A;
+    border-left: 2px solid #8BC34A;
+    border-right: 2px solid #8BC34A;
+}
+
+.active {
+    color: #8BC34A !important;
+    border-left: 2px solid #8BC34A;
+    border-right: 2px solid #8BC34A;
+    cursor: default;
+}
+
+/* Main Top Container */
+
+.top-container{
+    /* margin-top: 23px; */
+    margin-bottom: 750px;
+}
+
+.img-container{
+    float: left;
+    margin-left: 103px;
+    margin-top: 120px;
+}
+
+.img-container img{
+    vertical-align: middle;
+}
+
+.text-container{
+    float: right;
+    margin-right: 50px;
+    margin-top: 220px;
+    /* margin-left: 100px; */
+}
+
+.text-container h3{
+    font-family: 'Merriweather', serif;
+    font-size: 17px;
+    color: #333333;
+    width: 600px;
+}
+
+.text-container h1{
+    font-family: 'Merriweather', serif;
+    font-size: 52px;
+    color: #333333;
+    width: 500px;
+}
+
+.text-container p{
+    width: 500px;
+    font-family: 'Open Sans', sans-serif;
+    font-size: 16px;
+}
+
