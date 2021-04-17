@@ -1,0 +1,20 @@
+{
+  "name": "sgmv-1.0",
+  "version": "1.0.0",
+  "description": "Smart Grocery System -- Major Project for Final Semester",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Harshit Goyal, Udit Bhardwaj, Shruti Jindal",
+  "license": "ISC",
+  "dependencies": {
+    "bcrypt": "^5.0.1",
+    "body-parser": "^1.19.0",
+    "ejs": "^3.1.6",
+    "express": "^4.17.1",
+    "md5": "^2.3.0",
+    "mongoose": "^5.11.15",
+    "passport": "^0.4.1"
+  }
+}

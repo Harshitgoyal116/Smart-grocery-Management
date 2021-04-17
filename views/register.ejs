@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Register</title>
+    <link rel="shortcut icon" href="img/favicon.png" type="image/x-icon" />
+    <link rel="stylesheet" href="css/login.css" />
+  </head>
+
+  <body>
+    <header>
+      <form action="/register" method="post">
+        <div class="main-header">
+          <h1>Admin Register</h1>
+          <hr class="hr" />
+          <h3>Welcome to Smart Grocery Management</h3>
+          <p><input class="input" type="text" name="uname" id="uname" placeholder="Username" autocomplete="off" required autofocus /></p>
+          <p><input class="input" type="password" name="pass" id="pass" placeholder="Password" required /></p>
+          <p><input class="showpassBox" type="checkbox" name="showpass" id="showpass" onclick="isPassVisible()" />Show Password</p>
+          <!-- Drop down -->
+          <!-- <p class="dropdown">
+                    <label for="login">Login for:</label>
+
+                    <select name="not-set" id="login" class="options">
+                        <option value="not-set" selected>Select</option>
+                        <option value="admin" >Admin</option>
+                        <option value="employee">Employee</option>
+                    </select>
+                </p> -->
+          <!-- Drop down -->
+          <p><button class="btn-sign-in" type="submit">Sign up</button></p>
+        </div>
+      </form>
+    </header>
+
+    <!-- JavaScript -->
+    <script type="text/javascript">
+      // Show password Checkbox function
+      function isPassVisible() {
+        var showPassword = document.getElementById("pass");
+        if (showPassword.type == "password") {
+          showPassword.type = "text";
+        } else {
+          showPassword.type = "password";
+        }
+      }
+    </script>
+  </body>
+</html>
