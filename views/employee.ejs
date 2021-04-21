@@ -1,0 +1,249 @@
+<%- include("partials/header"); -%>
+
+    <!-- custom css -->
+    <link rel="stylesheet" href="css/admin.css" />
+    <link rel="stylesheet" href="css/employee.css" />
+
+    <%- include("partials/adminNavbar"); %>
+
+        <h1 class="main-heading">Employes Management</h1>
+
+        <!-- Display Error -->
+        <% if(messages.error) {%>
+            <div class="alert alert-danger alert-dismissible fade show errors-div" role="alert">
+                <%= messages.error %>
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+            <% } %>
+                <!-- Display Error -->
+                <!-- Display Success -->
+                <% if(messages.success) {%>
+                    <div class="alert alert-success alert-dismissible fade show errors-div" role="alert">
+                        <%= messages.success %>
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                    <% } %>
+                        <!-- Display Success -->
+
+
+                        <!--Add Modal Bootstarp -->
+                        <!-- Modal -->
+                        <div class="modal fade" id="addEmployeeModal" tabindex="-1" aria-labelledby="exampleModalLabel"
+                            aria-hidden="true">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="exampleModalLabel">Add Employees Record</h5>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                            aria-label="Close"></button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <form action="/employee" method="POST">
+                                            <div class="mb-3">
+                                                <label for="empID" class="form-label">Employee ID</label>
+                                                <input type="text" class="form-control" id="empID" name="username"
+                                                    placeholder="Enter Employee ID.">
+                                            </div>
+                                            <div class="mb-3">
+                                                <label for="empPass" class="form-label">Employee Password</label>
+                                                <input type="text" class="form-control" id="empPass" name="password"
+                                                    placeholder="Enter Employee Password">
+                                            </div>
+                                            <div class="mb-3">
+                                                <label for="empName" class="form-label">Employee Name</label>
+                                                <input type="text" class="form-control" id="itemName" name="name"
+                                                    placeholder="Enter Employee Name">
+                                            </div>
+                                            <div class="mb-3">
+                                                <label for="empDepart" class="form-label">Department</label>
+                                                <input type="text" class="form-control" id="empDepart" name="department"
+                                                    placeholder="Enter Department info.">
+                                            </div>
+                                            <div class="mb-3">
+                                                <label for="empDOB" class="form-label">Date of Birth</label>
+                                                <input type="text" class="form-control" id="empDOB" name="DOB"
+                                                    placeholder="Enter Employee DOB">
+                                            </div>
+                                            <div class="mb-3">
+                                                <label for="empNumber" class="form-label">Phone Number</label>
+                                                <input type="text" class="form-control" id="empNumber" name="Phone"
+                                                    placeholder="Enter Employee contact Number">
+                                            </div>
+                                            <div class="mb-3">
+                                                <label for="empAddress" class="form-label">Address</label>
+                                                <input type="text" class="form-control" id="empAddress" name="Address"
+                                                    placeholder="Enter Employee Address">
+                                            </div>
+                                            <button type="button" class="btn btn-secondary"
+                                                data-bs-dismiss="modal">Close</button>
+                                            <button type="reset" class="btn btn-secondary">Reset</button>
+                                            <button type="submit" class="btn btn-primary">Save</button>
+                                        </form>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <div>Copyright &copy; 2021</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!--Add Modal Bootstarp -->
+
+                        <!--Modify Modal Bootstarp -->
+                        <div class="modal fade" id="modifyEmployeeModal" tabindex="-1"
+                            aria-labelledby="exampleModalLabel" aria-hidden="true">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="exampleModalLabel">Update Employees Record</h5>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                            aria-label="Close"></button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <form action="/modify_employee" method="POST">
+                                            <input type="hidden" name="dbId" class="dbId">
+                                            <div class="mb-3">
+                                                <label for="empID" class="form-label">Employee ID</label>
+                                                <input type="text" class="form-control userUsername" id="empID"
+                                                    name="username" placeholder="Enter Employee ID.">
+                                            </div>
+                                            <div class="mb-3">
+                                                <label for="empPass" class="form-label">Employee Password</label>
+                                                <input type="text" class="form-control" id="empPass" name="password"
+                                                    placeholder="Enter Employee New Password">
+                                            </div>
+                                            <div class="mb-3">
+                                                <label for="empName" class="form-label">Employee Name</label>
+                                                <input type="text" class="form-control userName" id="itemName"
+                                                    name="name" placeholder="Enter Employee Name">
+                                            </div>
+                                            <div class="mb-3">
+                                                <label for="empDepart" class="form-label">Department</label>
+                                                <input type="text" class="form-control userDepartment" id="empDepart"
+                                                    name="department" placeholder="Enter Department info.">
+                                            </div>
+                                            <div class="mb-3">
+                                                <label for="empDOB" class="form-label">Date of Birth</label>
+                                                <input type="text" class="form-control userDOB" id="empDOB" name="DOB"
+                                                    placeholder="Enter Employee DOB">
+                                            </div>
+                                            <div class="mb-3">
+                                                <label for="empNumber" class="form-label">Phone Number</label>
+                                                <input type="text" class="form-control userPhone" id="empNumber"
+                                                    name="Phone" placeholder="Enter Employee contact Number">
+                                            </div>
+                                            <div class="mb-3">
+                                                <label for="empAddress" class="form-label">Address</label>
+                                                <input type="text" class="form-control userAddress" id="empAddress"
+                                                    name="Address" placeholder="Enter Employee Address">
+                                            </div>
+                                            <button type="button" class="btn btn-secondary"
+                                                data-bs-dismiss="modal">Close</button>
+                                            <button type="reset" class="btn btn-secondary">Reset</button>
+                                            <button type="submit" class="btn btn-primary">Save</button>
+                                        </form>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <div>Copyright &copy; 2021</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!--Modify Modal Bootstarp -->
+
+                        <!-- Delete Modal Bootstarp -->
+                        <div class="modal fade" id="deleteEmployeeModal" tabindex="-1"
+                            aria-labelledby="exampleModalLabel" aria-hidden="true">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+
+                                    <div class="modal-body">
+                                        <form action="/delete_employee" method="POST">
+                                            <h3>Do you want to delete?</h3>
+                                            <h5 class="userUsername"></h5>
+                                            <h5 class="userName"></h5>
+                                            <br>
+                                            <input type="hidden" name="userId" class="userId" />
+                                            <button type="button" class="btn btn-secondary"
+                                                data-bs-dismiss="modal">Cancel</button>
+                                            <button type="submit" class="btn btn-primary">Delete</button>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Delete Modal Bootstarp -->
+
+
+                        <table class="empTable table table-striped">
+                            <thead>
+                                <tr class="table-dark">
+                                    <th scope="col">ID</th>
+                                    <th scope="col">Name</th>
+                                    <th scope="col">Department</th>
+                                    <th scope="col">Date of Birth</th>
+                                    <th scope="col">Phone Number</th>
+                                    <th scope="col">Address</th>
+                                    <th><button class="addBtn" data-bs-toggle="modal"
+                                            data-bs-target="#addEmployeeModal">Add
+                                            Record</button>
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <% employee.forEach(users=> { %>
+                                    <tr>
+                                        <% if(users.role=='employee' ){ %>
+                                            <td>
+                                                <%= users.username %>
+                                            </td>
+                                            <td>
+                                                <%= users.name %>
+                                            </td>
+                                            <td>
+                                                <%= users.department %>
+                                            </td>
+                                            <td>
+                                                <%= users.DOB %>
+                                            </td>
+                                            <td>
+                                                <%= users.Phone %>
+                                            </td>
+                                            <td>
+                                                <%= users.Address %>
+                                            </td>
+                                            <td><i class="fas fa-edit update" data-bs-toggle="modal"
+                                                    data-bs-target="#modifyEmployeeModal"
+                                                    onclick="modifyEmployee('<%=JSON.stringify(users)%>')"></i>
+                                                <i class="fas fa-trash delete" data-bs-toggle="modal"
+                                                    data-bs-target="#deleteEmployeeModal"
+                                                    onclick="deleteEmployee('<%=JSON.stringify(users)%>')"></i>
+                                            </td>
+                                            <% } %>
+                                    </tr>
+                                    <% }); %>
+                            </tbody>
+                        </table>
+                        <%- include("partials/footer") -%>
+
+                            <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+
+                            <script>
+                                function deleteEmployee(Data) {
+                                    const user = JSON.parse(Data.replace("\\", "\/"));
+                                    $(".userName").text(user.name);
+                                    $(".userUsername").text(user.username);
+                                    $(".userId").val(user._id);
+                                }
+
+                                function modifyEmployee(Data) {
+                                    const user = JSON.parse(Data.replace("\\", "\/"));
+                                    $(".dbId").val(user._id);
+                                    $(".userUsername").val(user.username);
+                                    // $(".userPassword").val(user.password);
+                                    $(".userName").val(user.name);
+                                    $(".userDepartment").val(user.department);
+                                    $(".userDOB").val(user.DOB);
+                                    $(".userPhone").val(user.Phone);
+                                    $(".userAddress").val(user.Address);
+                                }
+                            </script>

@@ -1,0 +1,82 @@
+<%- include("partials/header"); -%>
+
+    <!-- custorm css -->
+    <link rel="stylesheet" href="css/admin.css" />
+
+    <% if(user.role=='admin' ){ %>
+        <%- include("partials/adminNavbar"); %>
+            <% } else { %>
+                <%- include("partials/employeeNavbar"); %>
+                    <% } %>
+
+                        <!-- Main top Container -->
+                        <div class="top-container">
+                            <div class="img-container">
+                                <img src="img/organic-products-hero.png" alt="Main image" />
+                            </div>
+                            <div class="text-container">
+                                <div>
+                                    <img src="img/logo-leaf-new.png" alt="leaf logo" />
+                                </div>
+                                <h3>Best quality product</h3>
+                                <h1>Join The Organic Movement!</h1>
+                                <p><strong>Smart Grocery Management</strong> is a web based management app which
+                                    organise all the
+                                    grocery in
+                                    the store.</p>
+                            </div>
+                        </div>
+                        <!-- Main top Container -->
+                        <div>
+                            <h1 class="heading-h1">Only few left</h1>
+
+                            <table class="empTable table table-striped">
+                                <thead>
+                                    <tr class="table-dark">
+                                        <th scope="col">ID</th>
+                                        <th scope="col">Name</th>
+                                        <th scope="col">Mfd. Date</th>
+                                        <th scope="col">Exp. Date</th>
+                                        <th scope="col">Qty.</th>
+                                        <th scope="col">Cost Price</th>
+                                        <th scope="col">Selling Price</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <% for(var i=0; i < (product.length> 10 ? 10 : product.length); i++){ %>
+
+                                        <tr>
+                                            <td>
+                                                <%= product[i].id %>
+                                            </td>
+                                            <td>
+                                                <%= product[i].name %>
+                                            </td>
+                                            <td>
+                                                <%= product[i].mfd %>
+                                            </td>
+                                            <td>
+                                                <%= product[i].exp %>
+                                            </td>
+                                            <td>
+                                                <%= product[i].qty %>
+                                            </td>
+                                            <td>
+                                                <%= product[i].cp %>
+                                            </td>
+                                            <td>
+                                                <%= product[i].sp %>
+                                            </td>
+                                        </tr>
+                                        <% } %>
+                                </tbody>
+                            </table>
+
+
+                            <% if(user.role=='admin' ){ %>
+                                <%- include("partials/adminContact"); %>
+                                    <% } else { %>
+                                        <%- include("partials/employeeContact"); %>
+                                            <% } %>
+
+                                                <%- include("partials/footer") -%>
