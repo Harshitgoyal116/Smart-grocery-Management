@@ -1,0 +1,64 @@
+.main-heading{
+    font-family: 'Merriweather', serif;
+    font-size: 20px;
+    color: #333333;
+    text-align: center;
+    margin-top: 23px;
+}
+
+.invoiceTable{
+    padding: 12px;
+    /* border: 2px solid black; */
+    /* width: 60%; */
+     margin-top: 10px;
+    font-family: 'Open Sans', sans-serif;
+    text-align: center;
+}
+
+.invoiceTable tbody td i{
+    color: #8BC34A;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+.invoiceTable tbody td i:hover{
+    color: #4c7919;
+}
+
+.invoiceTable tbody td .delete{
+    margin-left: 12px;
+}
+
+.btn-container{
+    position: absolute;
+    right: 0;
+    top: 0;
+}
+
+.search-container{
+    position: relative;
+}
+
+.btn-custom{
+    color: #198754 !important;
+    border: 1px solid #198754 !important;
+    background-color: transparent !important;
+}
+
+.btn-custom:hover{
+    background-color: rgb(230, 235, 233) !important;
+}
+
+.not-focus:focus{
+    box-shadow: none !important;
+}
+
+.form-control{
+    border: 1px solid #198754 !important;
+}
+
+.right-border-none{
+    border-right: none !important;
+    border-top-right-radius: 0 !important;
+    border-bottom-right-radius: 0 !important;
+}

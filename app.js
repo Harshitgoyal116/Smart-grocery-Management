@@ -39,13 +39,18 @@ app.use(
 );
 
 // Database connection
-mongoose.connect(url, { useNewUrlParser: true, useUnifiedTopology: true });
+mongoose.connect(url, { useNewUrlParser: true, useUnifiedTopology: true, useFindAndModify: false });
 
-// const adminSchema = new mongoose.Schema({
-//     username: String,
-//     password: String,
-//     role: {type:String, default: "admin"}
-// });
+const grocerySchema = new mongoose.Schema({
+    id: String,
+    name: String,
+    exp: String,
+    mfd: String,
+    qty: Number,
+    cp: Number,
+    sp: Number
+});
+
 const userSchema = new mongoose.Schema({
     username: String,
     password: String,
@@ -104,17 +109,16 @@ app.use((req, res, next) => {
 
 // const Admin = new mongoose.model("Admin", adminSchema);
 const User = new mongoose.model("User", userSchema);
+const Grocery = new mongoose.model("Grocery", grocerySchema);
+
+// all routes
 
 // login admin get route
 app.get("/", function (req, res) {
     if (!req.isAuthenticated()) {
         return res.render("login");
     }
-    if (req.user.role == "admin") {
-        res.redirect('/admin');
-    } else {
-        res.redirect('/employee-home')
-    }
+    res.redirect('/home');
 });
 
 // login admin post route
@@ -129,23 +133,22 @@ app.post("/", function (req, res, next) {
     passport.authenticate("local", (err, user, info) => {
         if (err) {
             req.flash("error", info.message);
+            req.flash('uname', uname);
             return next(err);
         }
 
         if (!user) {
             req.flash("error", info.message);
+            req.flash('uname', uname);
             return res.redirect("/");
         }
         req.logIn(user, (err) => {
             if (err) {
                 req.flash("error", info.flash);
+                req.flash('uname', uname);
                 return next(err);
             }
-            if (user.role === "admin") {
-                return res.redirect("/admin");
-            } else {
-                return res.redirect("/employee-home")
-            }
+            return res.redirect("/home")
         })
     })(req, res, next);
 });
@@ -155,7 +158,7 @@ app.get("/register", function (req, res) {
     if (!req.isAuthenticated()) {
         return res.render("register");
     }
-    res.redirect('/admin');
+    res.redirect('/home');
 });
 
 // register admin post route
@@ -166,7 +169,7 @@ app.post("/register", function (req, res) {
         req.flash("uname", uname);
         return res.redirect("/register");
     }
-    // Check if email or phone number already exists
+    // Check if username already exists
     User.exists({ username: uname }, async (err, result) => {
         if (result) {
             req.flash("error", "Username already exists!");
@@ -183,7 +186,7 @@ app.post("/register", function (req, res) {
             user.save().then(() => {
                 req.login(user, (err) => {
                     if (err) { return next(err); }
-                    return res.redirect("/admin");
+                    return res.redirect("/home");
                 });
             }).catch(err => {
                 req.flash("error", "Something went wrong!");
@@ -195,49 +198,288 @@ app.post("/register", function (req, res) {
 
 });
 
-// admin home page route
-app.get("/admin", function (req, res) {
+// admin home page get route
+app.get("/home", function (req, res) {
+    if (req.isAuthenticated()) {
+        Grocery.find({}, null, { sort: { 'qty': 1 } }, function (err, items) {
+            res.render("home", {
+                product: items,
+                current: "home"
+            });
+        })
+    } else {
+        res.redirect('/');
+    }
+});
+
+// grocery module page get route
+app.get("/grocery", function (req, res) {
+    if (req.isAuthenticated()) {
+        Grocery.find({}, function (err, foundData) {
+            res.render("grocery", {
+                data: foundData,
+                current: "grocery"
+            });
+        })
+    } else {
+        res.redirect('/');
+    }
+});
+
+// Grocery Module post route for add records
+app.post("/grocery", function (req, res) {
+    const { id, name, exp, mfd, qty, cp, sp } = req.body;
+    if (!id.trim() || !name.trim() || !exp.trim() || !mfd.trim() || !qty.trim() || !cp.trim() || !sp.trim()) {
+        req.flash("error", "All fields are mandatory");
+        return res.redirect("/grocery");
+    } else {
+        const grocery = new Grocery({
+            id: id,
+            name: name,
+            exp: exp,
+            mfd: mfd,
+            qty: qty,
+            cp: cp,
+            sp: sp
+        });
+
+        grocery.save(function (err) {
+            if (err) {
+                console.log(err);
+            } else {
+                req.flash("success", "Record added sucessfully!");
+                res.redirect("/grocery");
+            }
+        });
+    }
+});
+
+// Delete grocery items post route
+app.post('/delete_grocery', function (req, res) {
+    Grocery.findByIdAndDelete(req.body.itemId, (err, grocery) => {
+        if (err) {
+            req.flash("error", "Something went wrong, try again!");
+            res.redirect("/grocery");
+        } else {
+            req.flash("success", "Record successfully deleted!");
+            res.redirect("/grocery");
+        }
+    });
+});
+
+// Modify grocery items post route
+app.post('/modify_grocery', function (req, res) {
+    const { id, name, exp, mfd, qty, cp, sp } = req.body;
+    if (!id.trim() || !name.trim() || !exp.trim() || !mfd.trim() || !qty.trim() || !cp.trim() || !sp.trim()) {
+        req.flash("error", "All fields are mandatory");
+        return res.redirect("/grocery");
+    } else {
+        Grocery.findByIdAndUpdate(req.body.dbId, {
+            id: id,
+            name: name,
+            exp: exp,
+            mfd: mfd,
+            qty: qty,
+            cp: cp,
+            sp: sp
+        }, (err, product) => {
+            req.flash("success", "Record update sucessfully!");
+            res.redirect("/grocery");
+        });
+    }
+});
+
+// admin employe page get route
+app.get("/employee", function (req, res) {
     if (req.isAuthenticated() && req.user.role == "admin") {
-        return res.render("adminHome");
+        User.find({}, function (err, foundUser) {
+            res.render("employee", {
+                employee: foundUser,
+                current: "employee"
+            });
+        })
+    } else {
+        res.redirect('/');
     }
-    res.redirect('/');
 });
 
-// admin grocery page route
-app.get("/admin-grocery", function (req, res) {
+// Employee Module post route for add records
+app.post('/employee', async function (req, res) {
+    const { username, password, name, department, DOB, Phone, Address } = req.body;
+    if (!username.trim() || !password.trim() || !name.trim() || !department.trim() || !DOB.trim() || !Phone.trim() || !Address.trim()) {
+        req.flash("error", "All fields are mandatory");
+        return res.redirect("/employee");
+    } else {
+        //hash password
+        const hashedPassword = await bcrypt.hash(password, 10);
+        const user = new User({
+            username: username,
+            password: hashedPassword,
+            name: name,
+            department: department,
+            DOB: DOB,
+            Phone: Phone,
+            Address: Address
+        });
+        user.save(function (err) {
+            if (err) {
+                console.log(err);
+                req.flash("error", "Something went wrong!");
+                res.redirect('/employee');
+            } else {
+                req.flash("success", "Record added sucessfully!");
+                res.redirect("/employee");
+            }
+        });
+    }
+});
+
+// Delete Employee Record post route
+app.post('/delete_employee', function (req, res) {
+    User.findByIdAndDelete(req.body.userId, (err, employee) => {
+        if (err) {
+            req.flash("error", "Something went wrong, try again!");
+            res.redirect("/employee");
+        } else {
+            req.flash("success", "Record successfully deleted!");
+            res.redirect("/employee");
+        }
+    });
+});
+
+// Modify Employee Record Post route
+app.post('/modify_employee', async function (req, res) {
+    const { username, password, name, department, DOB, Phone, Address } = req.body;
+    if (!username.trim() || !name.trim() || !department.trim() || !DOB.trim() || !Phone.trim() || !Address.trim()) {
+        req.flash("error", "All fields are mandatory");
+        return res.redirect("/employee");
+    } else {
+        if (!password.trim()) {
+            User.findByIdAndUpdate(req.body.dbId, {
+                username: username,
+                name: name,
+                department: department,
+                DOB: DOB,
+                Phone: Phone,
+                Address: Address
+            }, (err, product) => {
+                req.flash("success", "Record update sucessfully!");
+                res.redirect("/employee");
+            });
+        } else {
+            const hashedPassword = await bcrypt.hash(password, 10);
+            User.findByIdAndUpdate(req.body.dbId, {
+                username: username,
+                password: hashedPassword,
+                name: name,
+                department: department,
+                DOB: DOB,
+                Phone: Phone,
+                Address: Address
+            }, (err, product) => {
+                req.flash("success", "Record update sucessfully!");
+                res.redirect("/employee");
+            });
+        }
+    }
+});
+
+// Profile page get route
+app.get('/profile', function (req, res) {
     if (req.isAuthenticated()) {
-        return res.render("adminGrocery");
+        res.render("profile", {
+            current: "profile"
+        });
+    } else {
+        res.redirect('/');
     }
-    res.redirect('/');
 });
 
-// admin employe page route
-app.get("/admin-employee", function (req, res) {
+// modify user profile post route
+app.post('/modify_profile', function (req, res) {
+    const { username, name, department, DOB, Phone, Address } = req.body;
+    if (!username.trim() || !name.trim() || !department.trim() || !DOB.trim() || !Phone.trim() || !Address.trim()) {
+        req.flash("error", "All fields are mandatory");
+        return res.redirect("/profile");
+    } else {
+        User.findByIdAndUpdate(req.body.dbId, {
+            username: username,
+            name: name,
+            department: department,
+            DOB: DOB,
+            Phone: Phone,
+            Address: Address
+        }, (err, product) => {
+            req.flash("success", "Profile updated sucessfully!");
+            res.redirect("/profile");
+        });
+    }
+});
+
+// Change password post route
+app.post('/change_password', async function (req, res) {
+    const { newPassword, confirmPassword } = req.body;
+    if (newPassword == confirmPassword) {
+        if (!newPassword.trim() || !confirmPassword.trim()) {
+            req.flash("error", "All fields are mandatory");
+            return res.redirect("/profile");
+        } else {
+            const newHashedPassword = await bcrypt.hash(newPassword, 10);
+            User.findByIdAndUpdate(req.user._id, {
+                password: newHashedPassword
+            }, (err, product) => {
+                req.flash("success", "Password updated sucessfully!");
+                res.redirect("/profile");
+            });
+        }
+    } else {
+        req.flash("error", "new password should match with confirm password!");
+        res.redirect('/profile');
+    }
+});
+
+// delete account post route
+app.post('/delete_account', function (req, res) {
+    User.findByIdAndDelete(req.body.userId, (err, employee) => {
+        if (err) {
+            req.flash("error", "Something went wrong, try again!");
+            res.redirect("/sign-out");
+        } else {
+            req.flash("success", "Profile deleted successfully!");
+            res.redirect("/sign-out");
+        }
+    });
+});
+
+// invoice module get route
+app.get('/invoice', function (req, res) {
     if (req.isAuthenticated()) {
-        return res.render("adminEmployee");
+        res.render('invoice', {
+            current: 'invoice'
+        });
+    } else {
+        res.redirect('/');
     }
-    res.redirect('/');
 });
 
-// employe home page route
-app.get("/employee-home", function (req, res) {
+// print layout get module
+app.get('/print_bill', function (req, res) {
     if (req.isAuthenticated()) {
-        return res.render("employeeHome");
+        res.render('printLayout');
+    } else {
+        res.redirect('/');
     }
-    res.redirect('/');
 });
 
-// employee grocery page route
-app.get("/employee-grocery", function (req, res) {
-    if (req.isAuthenticated()) {
-        return res.render("employeeGrocery");
-    }
-    res.redirect('/');
-});
-
+// sign out to login page
 app.get('/sign-out', (req, res) => {
     req.logout();
     res.redirect('/');
+});
+
+// 404 pages
+app.get('/*', function (req, res) {
+    res.render("404page");
 });
 
 // Server PORT

@@ -116,3 +116,19 @@ body{
     text-align: center;
     margin: 12px;
 }
+
+.user-welcome-label{
+    color: #fff;
+    cursor: default !important;
+    background-color: #8BC34A;
+    padding:3px 8px;
+    border-radius: 12px;
+}
+
+.profile-active{
+    background-color: #8BC34A;
+    color: rgb(252,251,250) !important;
+    border-radius: 50%;
+    padding: 5px;
+    cursor: default;
+}

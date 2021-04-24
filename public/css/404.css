@@ -1,0 +1,80 @@
+* {
+    box-sizing: 0;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    background: linear-gradient(to right, white 50%, #383838 50%);
+    font-family: "Roboto", sans-serif;
+    font-size: 18px;
+    font-weight: 500;
+    line-height: 1.5;
+    color: white;
+}
+
+.mid-bar {
+    background-image: url("../img/right-edges.png");
+    position: absolute;
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    width: 50%;
+    margin: auto;
+    background-position: top right;
+    background-repeat: no-repeat;
+    background-size: 25px 100%;
+}
+
+aside img {
+    float: left;
+    width: 600px;
+    padding: 50px;
+    margin-top: 80px;
+    margin-left: 50px;
+}
+
+main {
+    float: right;
+    position: relative;
+    padding: 50px;
+    width: 300px;
+    margin-right: 200px;
+    margin-top: 180px;
+    text-align: center;
+}
+
+main h1 {
+    font-family: 'Fontdiner Swanky', cursive;
+    font-size: 4rem;
+    color: #c5dc50;
+    margin-bottom: 1rem;
+}
+
+main p {
+    margin-bottom: 2.5rem;
+    color: #B0A2EF;
+}
+
+main button {
+    font-family: "Fontdiner Swanky", cursive;
+    font-size: 1rem;
+    color: #383838;
+    border: none;
+    background-color: #f36a6f;
+    padding: 1rem 2.5rem;
+    transform: skew(-5deg);
+    transition: all 0.1s ease;
+    outline: none;
+}
+
+main button:hover {
+    transform: scale(1.2);
+    background-color: #c5dc50;
+    cursor: pointer;
+}
+
+button a, button a:hover, button a:visited{
+    text-decoration: none;
+    color: #fff;
+}

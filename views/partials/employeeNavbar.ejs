@@ -2,12 +2,15 @@
 <nav class="navbar">
     <img class="nav-logo" src="img/logo.PNG" alt="My store logo" />
     <ul class="nav-items">
-        <li><a href="#" class="active">Home</a></li>
-        <li><a href="/employee-grocery">Grocery</a></li>
-        <li><a href="#">Invoice</a></li>
+        <li><a href="/home" class="<%= current == 'home' ? 'active' : '' %>">Home</a></li>
+        <li><a href="/grocery" class="<%= current == 'grocery' ? 'active' : '' %>">Grocery</a></li>
+        <li><a href="/invoice" class="<%= current == 'invoice' ? 'active' : '' %>">Invoice</a></li>
         <li><a href="/sign-out">Sign out</a></li>
+        <li class="user-welcome-label"><b>Welcome <%= user.name %></b>
+        </li>
         <span class="profile-logo">
-            <a href="#"><i class="fas fa-user-circle fa-2x"></i></a>
+            <a href="/profile"><i
+                    class="fas fa-user-circle fa-2x <%= current == 'profile' ? 'profile-active' : '' %>"></i></a>
         </span>
     </ul>
 </nav>

@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Generate Bill - Organic Grocery Store</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <link rel="stylesheet" href="css/invoice.css">
+
+    <!-- Google fonts -->
+    <link rel="preconnect" href="https://fonts.gstatic.com/" crossorigin>
+    <link href="https://fonts.googleapis.com/css?family=Roboto:400,700" rel="stylesheet">
+
+
+
+    <!-- Bootstrap CDN -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+        integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+
+    <!-- Override some Bootstrap CDN styles - normally you should apply these through your Bootstrap variables / sass -->
+    <style>
+        body {
+            font-family: "Roboto", serif;
+            font-size: 0.8rem;
+            font-weight: 400;
+            line-height: 1.4;
+            color: #000000;
+            margin: 0;
+            padding: 0;
+            background-color: rgb(252, 251, 250) !important;
+        }
+
+        h1,
+        h2,
+        h4,
+        h5 {
+            font-weight: 700;
+            color: #000000;
+            background-color: rgb(252, 251, 250) !important;
+        }
+
+        h1 {
+            font-size: 2rem;
+        }
+
+        h2 {
+            font-size: 1.6rem;
+        }
+
+        h4 {
+            font-size: 1.2rem;
+        }
+
+        h5 {
+            font-size: 1rem;
+        }
+
+        .table {
+            color: #000;
+            background-color: rgb(252, 251, 250) !important;
+        }
+
+        .table td,
+        .table th {
+            border-top: 1px solid #000;
+            background-color: rgb(252, 251, 250) !important;
+        }
+
+        .table thead th {
+            vertical-align: bottom;
+            border-bottom: 2px solid #000;
+        }
+
+        @page {
+            margin-top: 2.5cm;
+            margin-bottom: 2.5cm;
+        }
+
+        @page :first {
+            margin-top: 0;
+            margin-bottom: 2.5cm;
+        }
+
+        @media print {
+            .print-btn-div {
+                display: none;
+            }
+        }
+    </style>
+
+</head>
+
+<body>
+
+    <div style="background-color: #000000; height: 10px;"></div>
+
+    <div class="container-fluid pt-2 pt-md-4 px-md-5">
+
+        <!-- Invoice heading -->
+
+        <table class="table table-borderless">
+            <tbody>
+                <tr>
+                    <td class="border-0">
+                        <div class="row">
+                            <div class="col-md text-center text-md-left mb-3 mb-md-0">
+                                <img class="logo img-fluid mb-3" src="img/logo.PNG" style="max-height: 140px;" />
+                                <br>
+
+                                <h2 class="mb-1">Organic Grocery Store</h2>
+                                787 Brunswick, Los Angeles, CA 50028<br>
+                                support@ogsportal.com / + 91 984 675 6884<br>
+                                <strong></strong>
+                            </div>
+
+                            <div class="col text-center text-md-right">
+
+                                <!-- Dont' display Bill To on mobile -->
+                                <span class="d-none d-md-block">
+                                    <h1>Billed To</h1>
+                                </span>
+
+                                <h4 class="mb-0">Customer Name</h4>
+
+                                Contact Number<br />
+
+
+                                <h5 class="mb-0 mt-3">Current Date</h5>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+
+        <!-- Invoice items table -->
+
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Summary</th>
+                    <th class="text-right">Price</th>
+                </tr>
+            </thead>
+            <tbody>
+
+                <tr>
+                    <td>
+                        <h5 class="mb-1">Shelby Boots</h5>
+                        Men's Shelby Leather Boots - 10/M
+                    </td>
+                    <td class="font-weight-bold align-middle text-right text-nowrap">$99.00 USD</td>
+                </tr>
+                <tr>
+                    <td colspan="2" class="text-right border-0 pt-4">
+                        <h5>Total: $248.00 USD</h5>
+                    </td>
+                </tr>
+        </table>
+
+        <!-- Thank you note -->
+
+        <h5 class="text-center pt-2">
+            Thank you for your custom!
+        </h5>
+        <div class="modal-footer print-btn-div">
+            <button class="btn btn-light btn-custom" onclick="window.print()">print</button>
+        </div>
+    </div>
+
+</body>

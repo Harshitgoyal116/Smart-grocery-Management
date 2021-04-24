@@ -1,0 +1,90 @@
+body{
+    background-color: rgb(232,231,253) !important;
+    
+}
+
+.navbar{
+    background-color: rgb(252,251,250);
+}
+
+.profile-container{
+    width: 60%;
+    margin: auto;
+    margin-top: 50px;
+    padding: 30px;
+    /* border: 1px dashed black; */
+    border-radius: 12px;
+    background-color: rgb(252,251,250);
+    position: relative;
+}
+
+.profile-container::before{
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 8px;
+    border-top-left-radius: inherit;
+    border-top-right-radius: inherit;
+    background-image: linear-gradient(to right, #8bc34a, #ce9a24, #ee694f, #de4b8e, #8e5bc2);
+}
+
+.profile-container h1{
+    color: #4c7919;
+    display: inline-block;
+}
+
+.button-container{
+    position: absolute;
+    top: 30px;
+    right: 30px;
+}
+.my-input-fields:focus{
+    border: none !important;
+    outline: none !important;
+    box-shadow: none !important;
+}
+
+.my-input-fields{
+    color: #5f5fb0!important;
+    font-weight: 700 !important;
+}
+
+.my-input-fields:disabled{
+    background-color: white !important;
+}
+
+.btn{
+    color: #198754 !important;
+    border: 1px solid #198754 !important;
+    background-color: transparent !important;
+}
+
+.btn:hover{
+    background-color: rgb(230, 235, 233) !important;
+}
+
+.form-group{
+    position: relative;
+}
+
+.my-fas{
+    position: absolute;
+    right: 10px;
+    top: 35px;
+    color: rgb(91, 93, 95);
+}
+
+.circle {
+    position: absolute;
+    right: 0;
+    top: 24px;
+    height: 38px;
+    width: 40px;
+    border-top-right-radius: 5px;
+    border-bottom-right-radius: 5px;
+    background-color: rgb(203,203,207);
+    border-top-left-radius: 50%;
+    border-bottom-left-radius: 50%;
+}

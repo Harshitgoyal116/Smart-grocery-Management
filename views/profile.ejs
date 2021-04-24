@@ -1,0 +1,308 @@
+<%- include("partials/header"); -%>
+
+    <!-- custom css -->
+    <link rel="stylesheet" href="css/admin.css" />
+    <link rel="stylesheet" href="css/profile.css" />
+
+    <% if(user.role=='admin' ){ %>
+        <%- include("partials/adminNavbar"); %>
+            <% } else { %>
+                <%- include("partials/employeeNavbar"); %>
+                    <% } %>
+
+                        <!--Modify Profile Modal Bootstarp -->
+                        <div class="modal fade" id="editProfileModal" tabindex="-1" aria-labelledby="exampleModalLabel"
+                            aria-hidden="true">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="exampleModalLabel">Edit Profile</h5>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                            aria-label="Close"></button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <form action="/modify_profile" method="POST">
+                                            <input type="hidden" name="dbId" class="dbId">
+                                            <div class="mb-3">
+                                                <label for="username" class="form-label">Username</label>
+                                                <input type="text" class="form-control userUsername" id="username"
+                                                    name="username" placeholder="Enter Username" autocomplete="off"
+                                                    <%=user.role=='employee' ? 'readonly' : '' %>>
+                                            </div>
+                                            <div class="mb-3">
+                                                <label for="name" class="form-label">Name</label>
+                                                <input type="text" class="form-control userName" id="name" name="name"
+                                                    placeholder="Enter Name" autocomplete="off" <%=user.role=='employee'
+                                                    ? 'readonly' : '' %>>
+                                            </div>
+                                            <div class="mb-3">
+                                                <label for="depart" class="form-label">Department</label>
+                                                <input type="text" class="form-control userDepartment" id="depart"
+                                                    name="department" placeholder="Enter Department" autocomplete="off"
+                                                    <%=user.role=='employee' ? 'readonly' : '' %>>
+                                            </div>
+                                            <div class="mb-3">
+                                                <label for="DOB" class="form-label">Date of Birth</label>
+                                                <input type="text" class="form-control userDOB" id="DOB" name="DOB"
+                                                    placeholder="Enter Date of Birth" autocomplete="off"
+                                                    <%=user.role=='employee' ? 'readonly' : '' %>>
+                                            </div>
+                                            <div class="mb-3">
+                                                <label for="Number" class="form-label">Phone Number</label>
+                                                <input type="text" class="form-control userPhone" id="Number"
+                                                    name="Phone" placeholder="Enter Phone Number" autocomplete="off">
+                                            </div>
+                                            <div class="mb-3">
+                                                <label for="Address" class="form-label">Address</label>
+                                                <input type="text" class="form-control userAddress" id="Address"
+                                                    name="Address" placeholder="Enter Address" autocomplete="off">
+                                            </div>
+                                            <div class="modal-footer">
+                                                <div>
+                                                    <button type="button" class="btn btn-secondary"
+                                                        data-bs-dismiss="modal">Cancel</button>
+                                                    <button type="submit" class="btn btn-primary">Save</button>
+                                                </div>
+                                            </div>
+                                        </form>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                        <!--Modify Profile Modal Bootstarp -->
+
+                        <!--Change Password Modal Bootstarp -->
+                        <div class="modal fade" id="changePasswordModal" tabindex="-1"
+                            aria-labelledby="exampleModalLabel" aria-hidden="true">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="exampleModalLabel">Change Password</h5>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                            aria-label="Close"></button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <form action="/change_password" method="POST">
+                                            <input type="hidden" name="dbId" class="dbId">
+
+                                            <div class="mb-3">
+                                                <label for="newPassword" class="form-label">New Password</label>
+                                                <input type="password" class="form-control" id="newPassword"
+                                                    name="newPassword" placeholder="Enter New password"
+                                                    autocomplete="off">
+                                            </div>
+                                            <div class="mb-3">
+                                                <label for="confirmPassword" class="form-label">Confirm Password</label>
+                                                <input type="password" class="form-control" id="confirmPassword"
+                                                    name="confirmPassword" placeholder="Confirm your password"
+                                                    autocomplete="off">
+                                            </div>
+                                            <div class="form-check">
+                                                <input type="checkbox" class="form-check-input" id="exampleCheck1"
+                                                    onclick="isPassVisible()">
+                                                <label class="form-check-label" for="exampleCheck1">Show
+                                                    Password</label>
+                                            </div>
+                                            <div class="modal-footer">
+                                                <div>
+                                                    <button type="button" class="btn btn-secondary"
+                                                        data-bs-dismiss="modal">Cancel</button>
+                                                    <button type="submit" class="btn btn-primary">Save</button>
+                                                </div>
+                                            </div>
+
+                                        </form>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                        <!--Change password Modal Bootstarp -->
+
+                        <!-- Delete Modal Bootstarp -->
+                        <div class="modal fade" id="deleteAccountModal" tabindex="-1"
+                            aria-labelledby="exampleModalLabel" aria-hidden="true">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <div class="modal-body">
+                                        <form action="/delete_account" method="POST">
+                                            <h3>Delete Account</h3>
+                                            <hr>
+                                            <h5> <span class="userName"></span>, Do you want to delete your account
+                                                permanently?</h5>
+                                            <br>
+                                            <input type="hidden" name="userId" class="userId" />
+                                            <button type="button" class="btn btn-secondary"
+                                                data-bs-dismiss="modal">Cancel</button>
+                                            <button type="submit" class="btn btn-primary">Delete permanently</button>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Delete Modal Bootstarp -->
+
+                        <!-- Profile content body -->
+                        <div class="profile-parent-container">
+                            <div class="profile-container">
+
+
+                                <% if(user.role=='admin' ){ %>
+                                    <h1>Admin Profile</h1>
+                                    <% }else{ %>
+                                        <h1>Employee Profile</h1>
+                                        <% } %>
+                                            <div class="button-container">
+                                                <button class="btn btn-light" data-bs-toggle="modal"
+                                                    data-bs-target="#editProfileModal"
+                                                    onclick="modifyUser('<%=JSON.stringify(user)%>')">Edit
+                                                    Profile</button>
+                                                <button class="btn btn-light" data-bs-toggle="modal"
+                                                    data-bs-target="#changePasswordModal">Change
+                                                    password</button>
+                                                <% if(user.role=='admin' ){ %>
+                                                    <button class="btn btn-light" data-bs-toggle="modal"
+                                                        data-bs-target="#deleteAccountModal"
+                                                        onclick="deleteAccount('<%=JSON.stringify(user)%>')">Delete
+                                                        Account</button>
+                                                    <% } %>
+                                            </div>
+                                            <div class="message container">
+                                                <!-- Display Complete your profile -->
+                                                <% if(user.name==null || user.department==null || user.DOB==null ||
+                                                    user.Phone==null || user.Address==null ) {%>
+                                                    <div class="alert alert-success alert-dismissible fade show errors-div"
+                                                        role="alert">
+                                                        Complete Your Profile
+                                                        <button type="button" class="btn-close" data-bs-dismiss="alert"
+                                                            aria-label="Close"></button>
+                                                    </div>
+                                                    <% } %>
+                                                        <!-- Display Complete your profile -->
+                                                        <!-- Display Error -->
+                                                        <% if(messages.error) {%>
+                                                            <div class="alert alert-danger alert-dismissible fade show errors-div"
+                                                                role="alert">
+                                                                <%= messages.error %>
+                                                                    <button type="button" class="btn-close"
+                                                                        data-bs-dismiss="alert"
+                                                                        aria-label="Close"></button>
+                                                            </div>
+                                                            <% } %>
+                                                                <!-- Display Error -->
+                                                                <!-- Display Success -->
+                                                                <% if(messages.success) {%>
+                                                                    <div class="alert alert-success alert-dismissible fade show errors-div"
+                                                                        role="alert">
+                                                                        <%= messages.success %>
+                                                                            <button type="button" class="btn-close"
+                                                                                data-bs-dismiss="alert"
+                                                                                aria-label="Close"></button>
+                                                                    </div>
+                                                                    <% } %>
+                                                                        <!-- Display Success -->
+                                            </div>
+                                            <section class="profile-form">
+                                                <!-- Bootstrap form -->
+                                                <form>
+                                                    <div class="form-group">
+                                                        <label for="username">Username</label>
+                                                        <input type="text" value="<%= user.username %>"
+                                                            class="form-control my-input-fields" id="username"
+                                                            placeholder="Enter Username" disabled>
+                                                        <div class="circle"></div>
+                                                        <i class="fas fa-id-badge my-fas"></i>
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label for="name">Name</label>
+                                                        <input type="text" value="<%= user.name %>"
+                                                            class="form-control my-input-fields" id="name"
+                                                            placeholder="Enter Name" disabled>
+                                                        <div class="circle"></div>
+                                                        <i class="fas fa-user my-fas"></i>
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label for="department">Department</label>
+                                                        <input type="text" value="<%= user.department %>"
+                                                            class="form-control my-input-fields" id="department"
+                                                            placeholder="Enter Department" disabled>
+                                                        <div class="circle"></div>
+                                                        <i class="fas fa-briefcase my-fas"></i>
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label for="dob">Date of Birth</label>
+                                                        <input type="text" value="<%= user.DOB %>"
+                                                            class="form-control my-input-fields" id="dob"
+                                                            placeholder="Enter Date of Birth" disabled>
+                                                        <div class="circle"></div>
+                                                        <i class="fas fa-calendar-week my-fas"></i>
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label for="phone">Phone Number</label>
+                                                        <input type="text" value="<%= user.Phone %>"
+                                                            class="form-control my-input-fields" id="phone"
+                                                            placeholder="Enter Phone Number" disabled>
+                                                        <div class="circle"></div>
+                                                        <i class="fas fa-phone my-fas"></i>
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label for="address">Address</label>
+                                                        <input type="text" value="<%= user.Address %>"
+                                                            class="form-control my-input-fields" id="address"
+                                                            placeholder="Enter Address" disabled>
+                                                        <div class="circle"></div>
+                                                        <i class="fas fa-map-marker-alt my-fas"></i>
+                                                    </div>
+
+                                                    <!-- <button type="submit" class="btn btn-primary">Submit</button> -->
+
+                                                </form>
+                                                <!-- Bootstrap form -->
+
+                                            </section>
+
+                            </div>
+                        </div>
+                        <!-- Profile content body -->
+
+                        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+
+                        <!-- JavaScript -->
+                        <script type="text/javascript">
+                            // Show password Checkbox function
+                            function isPassVisible() {
+                                var confirmPassword = document.getElementById("confirmPassword");
+                                var newPassword = document.getElementById("newPassword");
+                                if (confirmPassword.type == "password" && newPassword.type == "password") {
+                                    confirmPassword.type = "text";
+                                    newPassword.type = "text";
+                                } else {
+                                    confirmPassword.type = "password";
+                                    newPassword.type = "password";
+                                }
+                            }
+
+                            // modify account details function
+                            function modifyUser(Data) {
+                                const user = JSON.parse(Data.replace("\\", "\/"));
+                                $(".dbId").val(user._id);
+                                $(".userUsername").val(user.username);
+                                // $(".userPassword").val(user.password);
+                                $(".userName").val(user.name);
+                                $(".userDepartment").val(user.department);
+                                $(".userDOB").val(user.DOB);
+                                $(".userPhone").val(user.Phone);
+                                $(".userAddress").val(user.Address);
+                            }
+
+                            // delete account function
+                            function deleteAccount(Data) {
+                                const user = JSON.parse(Data.replace("\\", "\/"));
+                                $(".userName").text(user.name);
+                                $(".userId").val(user._id);
+                            }
+                        </script>
+
+
+                        <%- include("partials/footer"); %>

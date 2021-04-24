@@ -1,0 +1,87 @@
+<%- include("partials/header"); -%>
+
+    <!-- custorm css -->
+    <link rel="stylesheet" href="css/admin.css" />
+    <link rel="stylesheet" href="css/invoice.css" />
+
+    <% if(user.role=='admin' ){ %>
+        <%- include("partials/adminNavbar"); %>
+            <% } else { %>
+                <%- include("partials/employeeNavbar"); %>
+                    <% } %>
+
+                        <h1 class="main-heading">Invoice</h1>
+
+                        <!-- customer container -->
+                        <div class="container">
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text" id=""><i class="fas fa-user-tie fa-2x"></i></span>
+                                </div>
+                                <input type="text" class="form-control not-focus" id="customerName" name="customerName"
+                                    placeholder="Enter Customer Name">
+                                <input type="text" class="form-control not-focus" id="customerNumber"
+                                    name="customerNumber" placeholder="Enter Customer Contact Number">
+                            </div>
+                        </div>
+                        <!-- customer container -->
+                        <br>
+
+                        <!-- Search box and buttons -->
+                        <div class="search-container container">
+                            <!-- Search box -->
+                            <div class="input-group">
+                                <div class="form-outline">
+                                    <input type="search" id="form1" class="form-control not-focus right-border-none"
+                                        placeholder="Enter Item ID" />
+                                    <!-- <label class="form-label" for="form1">Search</label> -->
+                                </div>
+                                <button type="button" class="btn btn-light btn-custom">
+                                    <i class="fas fa-search-plus"> Add Record </i>
+                                </button>
+                            </div>
+
+                            <!-- Search box -->
+                            <!-- Buttons -->
+                            <div class="btn-container">
+                                <!-- <button class="btn btn-light btn-custom">Add Record</button> -->
+                                <button class="btn btn-light btn-custom" onclick="openPrintPage()">Print
+                                    Invoice</button>
+                            </div>
+                            <!-- Buttons -->
+                        </div>
+                        <!-- Search box and buttons -->
+
+                        <!-- Invoice Table -->
+                        <table class="invoiceTable table">
+                            <thead>
+                                <tr class="table-dark">
+                                    <th scope="col">Item ID</th>
+                                    <th scope="col">Item Name</th>
+                                    <th scope="col">Qty.</th>
+                                    <th scope="col">Price</th>
+                                    <th scope="col">Action</th>
+
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>001</td>
+                                    <td>Patanjali Cow Desi Ghee</td>
+                                    <td>1</td>
+                                    <td>530</td>
+
+                                    <td><i class="fas fa-trash delete"></i></td>
+                                </tr>
+
+                            </tbody>
+                        </table>
+                        <!-- Invoice Table -->
+
+                        <script>
+                            function openPrintPage() {
+                                window.open('/print_bill', '', "width = 800, height = 800, left=350");
+                            }
+                        </script>
+
+                        <%- include("partials/footer") -%>

@@ -22,8 +22,8 @@
         <hr class="hr" />
         <h3>Welcome to Smart Grocery Management</h3>
         <p>
-          <input class="input" type="text" name="uname" id="uname" placeholder="Username" autocomplete="off" required
-            autofocus />
+          <input class="input" type="text" value="<%= messages.uname %>" name="uname" id="uname" placeholder="Username"
+            autocomplete="off" required autofocus />
         </p>
         <p>
           <input class="input" type="password" name="pass" id="pass" placeholder="Password" required />
@@ -32,13 +32,21 @@
           Password</p>
         <!-- Display Error -->
         <% if(messages.error) {%>
-          <div class="alert alert-danger alert-dismissible fade show errors-div" role="alert">
+          <div class="alert alert-danger alert-dismissible fade show" role="alert">
             <%= messages.error %>
               <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
           </div>
           <% } %>
             <!-- Display Error -->
-            <p><button class="btn-sign-in" type="submit">Sign in</button></p>
+            <!-- Display Success -->
+            <% if(messages.success) {%>
+              <div class="alert alert-success alert-dismissible fade show" role="alert">
+                <%= messages.success %>
+                  <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+              </div>
+              <% } %>
+                <!-- Display Success -->
+                <p><button class="btn-sign-in" type="submit">Sign in</button></p>
       </div>
     </form>
   </header>
