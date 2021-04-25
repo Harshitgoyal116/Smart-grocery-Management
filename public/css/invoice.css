@@ -62,3 +62,17 @@
     border-top-right-radius: 0 !important;
     border-bottom-right-radius: 0 !important;
 }
+
+.empty-list{
+    display: block;
+}
+
+.empty-list img{
+    display: block;
+    width: 35% !important;
+    margin: auto !important;
+}
+
+.inline-form{
+    display: inline-block;
+}

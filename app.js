@@ -1,13 +1,8 @@
 // jshint esversion:6
 
 /**
- * Login page // added sucessfully
- * Admin registration // complete sucessfully
- * Admin
- * Employee
- * MongoDB - mongoose
- * ExpressJS
- * nodeJS
+ * Await -  execute line by line
+ * Async - 
  */
 
 // Start my code from here
@@ -34,7 +29,7 @@ app.use(
         resave: false,
         saveUninitialized: false,
         store: MongoStore.create({ mongoUrl: url }),
-        cookie: { maxAge: 24 * 60 * 60 * 1000 }, //24 hours
+        cookie: { maxAge: 24 * 60 * 60 * 1000 } //24 hours
     })
 );
 
@@ -86,6 +81,7 @@ function init(passport) {
         })
     );
 
+    // it provides req.user object in frontend as well as in backend
     passport.serializeUser((user, done) => {
         done(null, user._id);
     });
@@ -96,13 +92,13 @@ function init(passport) {
         });
     });
 }
-// const passportInit = require("./app/config/passport");
+// call passport function
 init(passport);
 app.use(passport.initialize());
 app.use(passport.session());
 
 app.use((req, res, next) => {
-    // res.locals.session = req.session;
+    res.locals.session = req.session;
     res.locals.user = req.user
     next();
 });
@@ -462,12 +458,117 @@ app.get('/invoice', function (req, res) {
     }
 });
 
-// print layout get module
+// print Laypot page post route
+app.post('/invoice', async function (req, res) {
+    const { customerName, customerNumber, itemId } = req.body;
+    if (!customerName.trim() || !customerNumber.trim() || !itemId.trim()) {
+        req.flash("error", "All fields are required");
+        return res.redirect('/invoice');
+    }
+    if (!req.session.bill) {
+        req.session.bill = {
+            items: {},
+            totalAmt: 0,
+            customer_name: customerName,
+            customer_number: customerNumber
+        }
+    }
+    let bill = req.session.bill;
+    await Grocery.findOne({ id: itemId }, function (err, foundItem) {
+        if (err) {
+            req.flash("error", "Something went wrong!");
+            return res.redirect('/invoice');
+        }
+        if (!foundItem) {
+            req.flash("error", "Item not found!");
+            return res.redirect('/invoice');
+        }
+        if (foundItem.qty < 1) {
+            req.flash("error", "Insuficient items!");
+            req.flash('name', customerName);
+            req.flash('number', customerName);
+            return res.redirect('/invoice');
+        } else {
+            if (!bill.items[foundItem._id]) {
+                bill.items[foundItem._id] = {
+                    item: foundItem,
+                    qty: 1
+                }
+                bill.totalAmt = bill.totalAmt + foundItem.sp;
+            } else {
+                bill.items[foundItem._id].qty = bill.items[foundItem._id].qty + 1;
+                bill.totalAmt = bill.totalAmt + foundItem.sp;
+            }
+            req.flash('name', customerName);
+            req.flash('number', customerNumber);
+            res.redirect('/invoice');
+        }
+    });
+});
+
+// minus qty post route
+app.post('/invoice/minus_qty', function (req, res) {
+    const itemID = req.body.dbId;
+    const bill = req.session.bill;
+    bill.totalAmt -= bill.items[itemID].item.sp;
+    bill.items[itemID].qty -= 1;
+    req.flash('name', req.session.bill.customer_name);
+    req.flash('number', req.session.bill.customer_number);
+    if (bill.items[itemID].qty == 0) {
+        delete bill.items[itemID];
+    }
+    if (Object.keys(bill.items).length === 0) {
+        delete req.session.bill;
+    }
+    return res.redirect('/invoice');
+});
+
+// Plus qty post route
+app.post('/invoice/plus_qty', async function (req, res) {
+    const itemID = req.body.dbId;
+    const bill = req.session.bill;
+    await Grocery.findById(itemID, function (err, foundItem) {
+        if (foundItem.qty < (bill.items[itemID].qty) + 1) {
+            req.flash("error", "Insuficient items!");
+            req.flash('name', req.session.bill.customer_name);
+            req.flash('number', req.session.bill.customer_number);
+            return res.redirect('/invoice');
+        } else {
+            bill.totalAmt += bill.items[itemID].item.sp;
+            bill.items[itemID].qty += 1;
+            req.flash('name', req.session.bill.customer_name);
+            req.flash('number', req.session.bill.customer_number);
+            return res.redirect('/invoice');
+        }
+    });
+});
+
+// clear button to delete session using get route
+app.get('/invoice/clear', function (req, res) {
+    delete req.session.bill;
+    res.redirect('/invoice');
+});
+
+// print layout get route
 app.get('/print_bill', function (req, res) {
     if (req.isAuthenticated()) {
         res.render('printLayout');
     } else {
         res.redirect('/');
+    }
+});
+
+// reduce qty from the table while print bill
+app.post('/print_bill/update', function (req, res) {
+    if (!req.session.bill) {
+        return res.redirect('/print_bill');
+    }
+    for (itemSet of Object.values(req.session.bill.items)) {
+        Grocery.findByIdAndUpdate(itemSet.item._id, { "$inc": { 'qty': -itemSet.qty } }, function (err, foundItems) {
+            if (err) {
+                console.log(err);
+            }
+        });
     }
 });
 

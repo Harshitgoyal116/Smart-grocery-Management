@@ -12,76 +12,155 @@
 
                         <h1 class="main-heading">Invoice</h1>
 
-                        <!-- customer container -->
-                        <div class="container">
-                            <div class="input-group">
-                                <div class="input-group-prepend">
-                                    <span class="input-group-text" id=""><i class="fas fa-user-tie fa-2x"></i></span>
-                                </div>
-                                <input type="text" class="form-control not-focus" id="customerName" name="customerName"
-                                    placeholder="Enter Customer Name">
-                                <input type="text" class="form-control not-focus" id="customerNumber"
-                                    name="customerNumber" placeholder="Enter Customer Contact Number">
+                        <!-- Display Error -->
+                        <% if(messages.error) {%>
+                            <div class="alert alert-danger alert-dismissible fade show errors-div" role="alert">
+                                <%= messages.error %>
+                                    <button type="button" class="btn-close" data-bs-dismiss="alert"
+                                        aria-label="Close"></button>
                             </div>
-                        </div>
-                        <!-- customer container -->
-                        <br>
+                            <% } %>
+                                <!-- Display Error -->
+                                <!-- Display Success -->
+                                <% if(messages.success) {%>
+                                    <div class="alert alert-success alert-dismissible fade show errors-div"
+                                        role="alert">
+                                        <%= messages.success %>
+                                            <button type="button" class="btn-close" data-bs-dismiss="alert"
+                                                aria-label="Close"></button>
+                                    </div>
+                                    <% } %>
+                                        <!-- Display Success -->
 
-                        <!-- Search box and buttons -->
-                        <div class="search-container container">
-                            <!-- Search box -->
-                            <div class="input-group">
-                                <div class="form-outline">
-                                    <input type="search" id="form1" class="form-control not-focus right-border-none"
-                                        placeholder="Enter Item ID" />
-                                    <!-- <label class="form-label" for="form1">Search</label> -->
-                                </div>
-                                <button type="button" class="btn btn-light btn-custom">
-                                    <i class="fas fa-search-plus"> Add Record </i>
-                                </button>
-                            </div>
+                                        <form action="/invoice" method="POST">
+                                            <!-- customer container -->
+                                            <div class="container">
+                                                <div class="input-group">
+                                                    <div class="input-group-prepend">
+                                                        <span class="input-group-text" id=""><i
+                                                                class="fas fa-user-tie fa-2x"></i></span>
+                                                    </div>
+                                                    <input type="text" class="form-control not-focus" id="customerName"
+                                                        name="customerName" placeholder="Enter Customer Name"
+                                                        value="<%= messages.name %>">
+                                                    <input type="text" class="form-control not-focus"
+                                                        id="customerNumber" name="customerNumber"
+                                                        placeholder="Enter Customer Contact Number"
+                                                        value="<%= messages.number %>">
+                                                </div>
+                                            </div>
+                                            <!-- customer container -->
+                                            <br>
 
-                            <!-- Search box -->
-                            <!-- Buttons -->
-                            <div class="btn-container">
-                                <!-- <button class="btn btn-light btn-custom">Add Record</button> -->
-                                <button class="btn btn-light btn-custom" onclick="openPrintPage()">Print
-                                    Invoice</button>
-                            </div>
-                            <!-- Buttons -->
-                        </div>
-                        <!-- Search box and buttons -->
+                                            <!-- Search box and buttons -->
+                                            <div class="search-container container">
+                                                <!-- Search box -->
+                                                <div class="input-group">
+                                                    <div class="form-outline">
+                                                        <input type="search" id="form1" name="itemId"
+                                                            class="form-control not-focus right-border-none"
+                                                            placeholder="Enter Item ID" />
+                                                        <!-- <label class="form-label" for="form1">Search</label> -->
+                                                    </div>
+                                                    <button type="submit" class="btn btn-light btn-custom">
+                                                        <i class="fas fa-search-plus"> Add Record </i>
+                                                    </button>
+                                                </div>
 
-                        <!-- Invoice Table -->
-                        <table class="invoiceTable table">
-                            <thead>
-                                <tr class="table-dark">
-                                    <th scope="col">Item ID</th>
-                                    <th scope="col">Item Name</th>
-                                    <th scope="col">Qty.</th>
-                                    <th scope="col">Price</th>
-                                    <th scope="col">Action</th>
+                                                <!-- Search box -->
+                                                <!-- Buttons -->
+                                                <div class="btn-container">
+                                                    <a href="/invoice/clear" class="btn btn-light btn-custom">Clear
+                                                        Record
+                                                    </a>
+                                                    <button type="button" class="btn btn-light btn-custom"
+                                                        onclick="openPrintPage()">Print
+                                                        Invoice</button>
+                                                </div>
+                                                <!-- Buttons -->
+                                            </div>
+                                            <!-- Search box and buttons -->
+                                        </form>
 
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td>001</td>
-                                    <td>Patanjali Cow Desi Ghee</td>
-                                    <td>1</td>
-                                    <td>530</td>
+                                        <!-- Invoice Table -->
+                                        <% if(session.bill){ %>
 
-                                    <td><i class="fas fa-trash delete"></i></td>
-                                </tr>
+                                            <table class="invoiceTable table">
+                                                <thead>
+                                                    <tr class="table-dark">
+                                                        <th scope="col">Item ID</th>
+                                                        <th scope="col">Item Name</th>
+                                                        <th scope="col">Unit Price</th>
+                                                        <th scope="col">Qty.</th>
+                                                        <th scope="col"> Total Price</th>
+                                                        <th scope="col">Action</th>
 
-                            </tbody>
-                        </table>
-                        <!-- Invoice Table -->
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <% for(let invoiceItem of Object.values(session.bill.items)){ %>
+                                                        <tr>
+                                                            <td>
+                                                                <%= invoiceItem.item.id %>
+                                                            </td>
+                                                            <td>
+                                                                <%= invoiceItem.item.name %>
+                                                            </td>
+                                                            <td>₹
+                                                                <%= invoiceItem.item.sp %>
+                                                            </td>
+                                                            <td>
+                                                                <%= invoiceItem.qty %>
+                                                            </td>
+                                                            <td>₹
+                                                                <%= (invoiceItem.item.sp) * (invoiceItem.qty) %>
+                                                            </td>
+                                                            <td>
+                                                                <form class="inline-form" action="/invoice/minus_qty"
+                                                                    method="POST">
+                                                                    <input type="hidden" name="dbId"
+                                                                        value="<%= invoiceItem.item._id %>">
+                                                                    <button type="submit" class="btn btn-light">
+                                                                        <i class="fas fa-minus"></i>
+                                                                    </button>
+                                                                </form>
+                                                                <form class="inline-form" action="/invoice/plus_qty"
+                                                                    method="POST">
+                                                                    <input type="hidden" name="dbId"
+                                                                        value="<%= invoiceItem.item._id %>">
+                                                                    <button type="submit" class="btn btn-light">
+                                                                        <i class="fas fa-plus"></i>
+                                                                    </button>
+                                                                </form>
 
-                        <script>
-                            function openPrintPage() {
-                                window.open('/print_bill', '', "width = 800, height = 800, left=350");
-                            }
-                        </script>
+                                                            </td>
+                                                        </tr>
+                                                        <% } %>
+                                                </tbody>
+                                            </table>
+                                            <% } else { %>
+                                                <table class="invoiceTable table">
+                                                    <thead>
+                                                        <tr class="table-dark">
+                                                            <th scope="col">Item ID</th>
+                                                            <th scope="col">Item Name</th>
+                                                            <th scope="col">Unit Price</th>
+                                                            <th scope="col">Qty.</th>
+                                                            <th scope="col"> Total Price</th>
+                                                            <th scope="col">Action</th>
 
-                        <%- include("partials/footer") -%>
+                                                        </tr>
+                                                    </thead>
+                                                </table>
+                                                <div class="container empty-list"><img src="img/emptylist.png"
+                                                        alt="Empty cart image"></div>
+                                                <% } %>
+                                                    <!-- Invoice Table -->
+
+                                                    <script>
+                                                        function openPrintPage() {
+                                                            window.open('/print_bill', '', "width = 800, height = 800, left=350");
+                                                        }
+                                                    </script>
+
+                                                    <%- include("partials/footer") -%>

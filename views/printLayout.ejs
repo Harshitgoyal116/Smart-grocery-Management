@@ -109,7 +109,7 @@
                                 <br>
 
                                 <h2 class="mb-1">Organic Grocery Store</h2>
-                                787 Brunswick, Los Angeles, CA 50028<br>
+                                K-210 Pitampura, New Delhi<br>
                                 support@ogsportal.com / + 91 984 675 6884<br>
                                 <strong></strong>
                             </div>
@@ -120,13 +120,22 @@
                                 <span class="d-none d-md-block">
                                     <h1>Billed To</h1>
                                 </span>
+                                <% if(session.bill){ %>
 
-                                <h4 class="mb-0">Customer Name</h4>
+                                    <h4 class="mb-0">
+                                        <%= session.bill.customer_name %>
+                                    </h4>
+                                    +91 <%= session.bill.customer_number %>
+                                        <br />
+                                        <% }else{%>
+                                            <h4 class="mb-0">Customer Name</h4>
+                                            +91 XXXXXXXXXX
+                                            <br />
+                                            <%} %>
 
-                                Contact Number<br />
 
-
-                                <h5 class="mb-0 mt-3">Current Date</h5>
+                                                <h6 class="mb-0 mt-3">Date:</h6>
+                                                <div id="currentDate"></div>
                             </div>
                         </div>
                     </td>
@@ -135,38 +144,89 @@
         </table>
 
         <!-- Invoice items table -->
+        <% if(session.bill){ %>
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Summary</th>
+                        <th>Unit Price (₹)</th>
+                        <th class="text-right">Total Price (₹)</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <% for(let invoiceItem of Object.values(session.bill.items)){ %>
+                        <tr>
+                            <td>
+                                <h5 class="mb-1">
+                                    <%= invoiceItem.item.name %>
+                                </h5>
+                                <%= invoiceItem.qty %> Pcs.
+                            </td>
+                            <td class="font-weight-bold align-middle text-nowrap">
+                                <%= invoiceItem.item.sp %>
+                            </td>
+                            <td class="font-weight-bold align-left text-right text-nowrap">
+                                <%= (invoiceItem.item.sp) * (invoiceItem.qty) %>
+                            </td>
+                        </tr>
+                        <% } %>
+                            <tr>
+                                <td colspan="3" class="text-right border-0 pt-4">
+                                    <h5>Grand Total: ₹ <%= session.bill.totalAmt %>
+                                    </h5>
+                                </td>
+                            </tr>
+            </table>
+            <% }else{ %>
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Summary</th>
+                            <th>Unit Price (₹)</th>
+                            <th class="text-right">Total Price (₹)</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>
+                                <h5 class="mb-1"></h5>
 
-        <table class="table">
-            <thead>
-                <tr>
-                    <th>Summary</th>
-                    <th class="text-right">Price</th>
-                </tr>
-            </thead>
-            <tbody>
+                            </td>
+                            <td class="font-weight-bold align-middle text-nowrap">
 
-                <tr>
-                    <td>
-                        <h5 class="mb-1">Shelby Boots</h5>
-                        Men's Shelby Leather Boots - 10/M
-                    </td>
-                    <td class="font-weight-bold align-middle text-right text-nowrap">$99.00 USD</td>
-                </tr>
-                <tr>
-                    <td colspan="2" class="text-right border-0 pt-4">
-                        <h5>Total: $248.00 USD</h5>
-                    </td>
-                </tr>
-        </table>
+                            </td>
+                            <td class="font-weight-bold align-left text-right text-nowrap">
 
-        <!-- Thank you note -->
+                            </td>
+                        </tr>
 
-        <h5 class="text-center pt-2">
-            Thank you for your custom!
-        </h5>
-        <div class="modal-footer print-btn-div">
-            <button class="btn btn-light btn-custom" onclick="window.print()">print</button>
-        </div>
+                        <tr>
+                            <td colspan="3" class="text-right border-0 pt-4">
+                                <h5>Grand Total: ₹ 0
+                                </h5>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+                <% } %>
+
+                    <!-- Thank you note -->
+
+                    <h5 class="text-center pt-2">
+                        Thanks for visit ---- Have a nice Day!
+                    </h5>
+                    <form action="/print_bill/update" method="POST">
+                        <div class="modal-footer print-btn-div">
+                            <button type="submit" class="btn btn-light btn-custom"
+                                onclick="window.print()">print</button>
+                        </div>
+                    </form>
     </div>
 
+    <script>
+        var d = new Date();
+        document.getElementById("currentDate").innerHTML = d.getDate() + "/" + (d.getMonth() + 1) + "/" + d.getFullYear();
+    </script>
 </body>
+
+</html>
